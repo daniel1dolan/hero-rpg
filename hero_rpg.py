@@ -5,6 +5,8 @@
 # 1. fight goblin
 # 2. do nothing - in which case the goblin will attack him anyway
 # 3. flee
+import random
+
 class Character: 
     def __init__(self, name, health, power):
         self.name = name
@@ -14,7 +16,7 @@ class Character:
         enemy.health -= self.power
         print(f"{self.name} does {self.power} damage to the {enemy.name}.")
         if enemy.health <= 0:
-            print(f"{enemy.name} is dead.")
+            print(f"{enemy.name} is dead!")
     def alive(self):
         if self.health <= 0:
             return False
@@ -24,7 +26,19 @@ class Character:
         print(f"{self.name} has {self.health} health and {self.power} power.")
 
 class Hero(Character):
-    pass
+    def attack(self, enemy):
+        #Crit value is a multiplier of power and doubles 20% of the time
+        self.damage = self.power * self.crit_multiplier()
+        print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
+        enemy.health -= self.damage
+        if enemy.health <= 0:
+            print(f"{enemy.name} is dead!")
+    def crit_multiplier(self):
+        self.crit_mult = 1
+        if random.randint(1, 6) == 3:
+            self.crit_mult = 2
+            print(f"{self.name} has dealt a critical strike!")
+        return self.crit_mult
 
 class Goblin(Character):
     pass
@@ -32,11 +46,14 @@ class Goblin(Character):
 class Zombie(Character):
     def alive(self):
         return True
+        #Zombie never does and while loop will never exit unless flee is chosen or hero dies.
+
+# class Medic(Character):
 
 
 def main():
     hero = Hero("Carl", 10, 5)
-    goblin = Goblin("General Wartface", 6, 2)
+    goblin = Goblin("General Wartface", 25, 2)
 
     while goblin.alive() and hero.alive():
         hero.print_status()
@@ -62,5 +79,7 @@ def main():
         if goblin.alive():
             # Goblin attacks hero
             goblin.attack(hero)
+
+
 
 main()
