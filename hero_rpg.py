@@ -225,7 +225,7 @@ def main():
             print("Invalid input {}".format(raw_input))
 
         if knight.alive():
-            # Ghost attacks hero
+            # Knight attacks hero
             print()
             knight.dialogue(hero)
             print()
@@ -246,10 +246,11 @@ def main():
         raw_input = input()
         print("-" * 43)
         if raw_input == "1":
-            # Hero attacks yogi
+            # Hero attacks yogi but yogi forces hero to flee
             print("Violence is not the answer.")
             break
         elif raw_input == "2":
+            #yogi blesses the hero
             print()
             print("I bless you with my powers.")
             hero.health += 5
