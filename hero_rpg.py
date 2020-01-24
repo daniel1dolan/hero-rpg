@@ -1,22 +1,19 @@
 #!/usr/bin/env python
-
-# In this simple RPG game, the hero fights the goblin. He has the options to:
-
-# 1. fight goblin
-# 2. do nothing - in which case the goblin will attack him anyway
-# 3. flee
 import random
 
 class Character: 
-    def __init__(self, name, health, power):
+    def __init__(self, name, health, power, coins):
         self.name = name
         self.health = health
         self.power = power
+        self.coins = coins
     def attack(self, enemy):
-        enemy.health -= self.power
+        self.damage = self.power - enemy.armor
+        enemy.health -= self.damage
         print(f"{self.name} does {self.power} damage to the {enemy.name}.")
         if enemy.health <= 0:
             print(f"{enemy.name} is dead!")
+            quit()
     def alive(self):
         if self.health <= 0:
             return False
@@ -26,19 +23,30 @@ class Character:
         print(f"{self.name} has {self.health} health and {self.power} power.")
 
 class Hero(Character):
+    def __init__(self, name, health, power, coins):
+        self.name = name
+        self.health = health
+        self.power = power
+        self.coins = coins
+        self.armor = 0
     def attack(self, enemy):
         #Crit value is a multiplier of power and doubles 20% of the time
+        self.coins = 0
         self.damage = self.power * self.crit_multiplier()
         print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
         enemy.health -= self.damage
-        if enemy.health <= 0:
+        if not enemy.alive():
             print(f"{enemy.name} is dead!")
+            self.coins += enemy.coins
     def crit_multiplier(self):
         self.crit_mult = 1
         if random.randint(1, 6) == 3:
             self.crit_mult = 2
             print(f"{self.name} has dealt a critical strike!")
         return self.crit_mult
+    def buy(self, item):
+        self.coins -= item.cost
+        item.apply(self)
 
 class Goblin(Character):
     pass
@@ -67,15 +75,60 @@ class Knight(Hero):
 class Yogi(Character):
     pass
 
+class SuperTonic:
+    def __init__(self):
+        self.cost = 5
+        self.name = "tonic"
+    def apply(self, character):
+        character.health += 10
+        print(f"{character.name}\'s health increased to {character.health}.")
+
+class Armor:
+    def __init__(self):
+        self.cost = 10
+        self.name = "armor"
+    def apply(self, character):
+        character.armor += 2
+        print(f"{character.name}\'s armor has been increased to {character.armor}.")
+
+class Store:
+    tonic = SuperTonic()
+    armor = Armor()
+    items = [tonic, armor]
+    def do_shopping(self, hero):
+        while True:
+            print("=====================")
+            print("Welcome to the store!")
+            print("=====================")
+            print("You have {} coins.".format(hero.coins))
+            print("What do you want to do?")
+            for i in range(len(self.items)):
+                item = self.items[i]
+                print("{}. buy {} ({})".format(i + 1, item.name, item.cost))
+            print("10. leave")
+            raw_imp = int(input("> "))
+            if raw_imp == 10:
+                break
+            else:
+                ItemToBuy = Store.items[raw_imp - 1]
+                item = ItemToBuy
+                hero.buy(item)
+    def go_shopping(self, character):
+        store_status = int(input("""1. Enter the store. 
+    Press another number to battle."""))
+        if store_status == 1:
+            self.do_shopping(character)
+
 
 def main():
-    hero = Hero("Carl", 100, 4)
-    goblin = Goblin("General Wartface", 25, 2)
-    zombie = Zombie("Experiment 254", 1, 2)
-    medic = Medic("Idaho Farm Boy David Bleak", 10, 2)
-    ghost = Ghost("Floating White Sheet", 1, 3)
-    knight = Knight("Sir Gawayne the Handsome", 10, 4)
-    yogi = Yogi("Ravi Shankar", 1, 1)
+    hero = Hero("Carl", 100, 4, 0)
+    goblin = Goblin("General Wartface", 25, 2, 5)
+    zombie = Zombie("Experiment 254", 1, 2, 100)
+    medic = Medic("Idaho Farm Boy David Bleak", 10, 2, 10)
+    ghost = Ghost("Floating White Sheet", 1, 3, 10)
+    knight = Knight("Sir Gawayne the Handsome", 10, 4, 10)
+    yogi = Yogi("Ravi Shankar", 1, 1, 0)
+    store = Store()
     print()
     print(f"{goblin.name} approaches.")
 
@@ -105,6 +158,8 @@ def main():
         if goblin.alive():
             # Goblin attacks hero
             goblin.attack(hero)
+        
+    store.go_shopping(hero)
 
     print()
     print(f"{zombie.name} approaches.")
