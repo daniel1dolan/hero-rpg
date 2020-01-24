@@ -7,10 +7,11 @@ class Character:
         self.health = health
         self.power = power
         self.coins = coins
+        self.armor = 0
     def attack(self, enemy):
         self.damage = self.power - enemy.armor
         enemy.health -= self.damage
-        print(f"{self.name} does {self.power} damage to the {enemy.name}.")
+        print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
         if enemy.health <= 0:
             print(f"{enemy.name} is dead!")
             quit()
@@ -23,16 +24,10 @@ class Character:
         print(f"{self.name} has {self.health} health and {self.power} power.")
 
 class Hero(Character):
-    def __init__(self, name, health, power, coins):
-        self.name = name
-        self.health = health
-        self.power = power
-        self.coins = coins
-        self.armor = 0
     def attack(self, enemy):
         #Crit value is a multiplier of power and doubles 20% of the time
         self.coins = 0
-        self.damage = self.power * self.crit_multiplier()
+        self.damage = (self.power * self.crit_multiplier()) - enemy.armor
         print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
         enemy.health -= self.damage
         if not enemy.alive():
@@ -121,7 +116,7 @@ class Store:
 
 
 def main():
-    hero = Hero("Carl", 100, 4, 0)
+    hero = Hero("Carl", 100, 4, 0) #name, health, power, coins/bounty
     goblin = Goblin("General Wartface", 25, 2, 5)
     zombie = Zombie("Experiment 254", 1, 2, 100)
     medic = Medic("Idaho Farm Boy David Bleak", 10, 2, 10)
