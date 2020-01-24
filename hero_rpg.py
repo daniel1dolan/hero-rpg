@@ -8,10 +8,19 @@ class Character:
         self.power = power
         self.coins = coins
         self.armor = 0
+        self.evade = 0
     def attack(self, enemy):
-        self.damage = self.power - enemy.armor
-        enemy.health -= self.damage
-        print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
+        if enemy.evade > 0:
+            if random.randint(1, ((20/enemy.evade) + 1)) == 3:
+                print(f"{enemy.name} has evaded the attack from {self.name}!")
+            else: 
+                self.damage = self.power - enemy.armor
+                enemy.health -= self.damage
+                print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
+        else: 
+            self.damage = self.power - enemy.armor
+            enemy.health -= self.damage
+            print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
         if enemy.health <= 0:
             print(f"{enemy.name} is dead!")
             quit()
@@ -86,10 +95,19 @@ class Armor:
         character.armor += 2
         print(f"{character.name}\'s armor has been increased to {character.armor}.")
 
+class Evade:
+    def __init__(self):
+        self.cost = 10
+        self.name = "evade"
+    def apply(self, character):
+        character.evade += 2
+        print(f"{character.name}\'s evade has been increased to {character.evade}.")
+
 class Store:
     tonic = SuperTonic()
     armor = Armor()
-    items = [tonic, armor]
+    evade = Evade()
+    items = [tonic, armor, evade]
     def do_shopping(self, hero):
         while True:
             print("=====================")
