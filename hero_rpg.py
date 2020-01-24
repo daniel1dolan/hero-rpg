@@ -145,7 +145,7 @@ class Store:
     def go_shopping(self, character):
         print("1. Enter the store.")
         print("Press another number to battle.")
-        store_status = int(input(">", end=' '))
+        store_status = int(input("> "))
         if store_status == 1:
             self.do_shopping(character)
 
