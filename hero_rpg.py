@@ -35,13 +35,13 @@ class Character:
 class Hero(Character):
     def attack(self, enemy):
         #Crit value is a multiplier of power and doubles 20% of the time
-        self.coins = 0
         self.damage = (self.power * self.crit_multiplier()) - enemy.armor
         print(f"{self.name} does {self.damage} damage to the {enemy.name}.")
         enemy.health -= self.damage
         if not enemy.alive():
             print(f"{enemy.name} is dead!")
             self.coins += enemy.coins
+            print(f"{self.name} has received the bounty for {enemy.name} of {enemy.coins}.")
     def crit_multiplier(self):
         self.crit_mult = 1
         if random.randint(1, 6) == 3:
@@ -99,15 +99,31 @@ class Evade:
     def __init__(self):
         self.cost = 10
         self.name = "evade"
+        self.use_count = 0
     def apply(self, character):
-        character.evade += 2
-        print(f"{character.name}\'s evade has been increased to {character.evade}.")
+        self.use_count += 1
+        if self.use_count <= 2:
+            character.evade += 2
+            print(f"{character.name}\'s evade has been increased to {character.evade}.")
+        else: 
+            character.coins += self.cost
+            print(f"{self.name} is sold out. Here are your coins back.")
+
+class Sword:
+    def __init__(self):
+        self.cost = 10
+        self.name = "sword"
+    def apply(self,character):
+        character.power += 5
+        print(f"{character.name}\'s power has been increased to {character.power}.")
+
 
 class Store:
     tonic = SuperTonic()
     armor = Armor()
     evade = Evade()
-    items = [tonic, armor, evade]
+    sword = Sword()
+    items = [tonic, armor, evade, sword]
     def do_shopping(self, hero):
         while True:
             print("=====================")
@@ -127,8 +143,9 @@ class Store:
                 item = ItemToBuy
                 hero.buy(item)
     def go_shopping(self, character):
-        store_status = int(input("""1. Enter the store. 
-    Press another number to battle."""))
+        print("1. Enter the store.")
+        print("Press another number to battle.")
+        store_status = int(input(">", end=' '))
         if store_status == 1:
             self.do_shopping(character)
 
@@ -203,6 +220,8 @@ def main():
             # Zombie attacks hero
             zombie.attack(hero)
     
+    store.go_shopping(hero)
+    
     print()
     print(f"{medic.name} approaches.")
     
@@ -232,6 +251,8 @@ def main():
         if medic.alive():
             # Medic attacks hero
             medic.attack(hero)
+    
+    store.go_shopping(hero)
     
     print()
     print(f"{ghost.name} approaches.")
@@ -266,6 +287,8 @@ def main():
             # Ghost attacks hero
             ghost.attack(hero)
         
+    store.go_shopping(hero)
+    
     print()
     print(f"{knight.name} approaches.")
     
@@ -298,6 +321,8 @@ def main():
             knight.dialogue(hero)
             print()
             knight.attack(hero)
+    
+    store.go_shopping(hero)
     
     print()
     print(f"{yogi.name} approaches.")
