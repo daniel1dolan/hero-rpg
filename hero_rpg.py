@@ -153,7 +153,7 @@ class Store:
 
 def main():
     hero = Hero("Carl", 100, 4, 0) #name, health, power, coins/bounty
-    goblin = Goblin("General Wartface", 25, 2, 5)
+    goblin = Goblin("General Wartface", 15, 2, 5)
     zombie = Zombie("Experiment 254", 1, 2, 100)
     medic = Medic("Idaho Farm Boy David Bleak", 10, 2, 10)
     ghost = Ghost("Floating White Sheet", 1, 3, 10)
