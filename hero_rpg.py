@@ -117,6 +117,7 @@ class Sword:
         character.power += 5
         print(f"{character.name}\'s power has been increased to {character.power}.")
 
+line_spacing = "====================="
 
 class Store:
     tonic = SuperTonic()
@@ -126,9 +127,9 @@ class Store:
     items = [tonic, armor, evade, sword]
     def do_shopping(self, hero):
         while True:
-            print("=====================")
+            print(line_spacing)
             print("Welcome to the store!")
-            print("=====================")
+            print(line_spacing)
             print("You have {} coins.".format(hero.coins))
             print("What do you want to do?")
             for i in range(len(self.items)):
@@ -172,7 +173,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         print()
         if raw_input == "1":
             # Hero attacks goblin
@@ -204,7 +205,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         if raw_input == "1":
             # Hero attacks zombie
             hero.attack(zombie)
@@ -235,7 +236,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         if raw_input == "1":
             # Hero attacks medic
             hero.attack(medic)
@@ -267,7 +268,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         if raw_input == "1":
             # Hero attacks ghost
             if random.randint(1, 11) == 2:
@@ -302,7 +303,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         if raw_input == "1":
             # Hero attacks knight
             hero.attack(knight)
@@ -337,7 +338,7 @@ def main():
         print("3. flee")
         print("> ", end=' ')
         raw_input = input()
-        print("-" * 43)
+        print(line_spacing)
         if raw_input == "1":
             # Hero attacks yogi but yogi forces hero to flee
             print("Violence is not the answer.")
