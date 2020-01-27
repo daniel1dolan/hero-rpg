@@ -3,8 +3,6 @@ import random
 import asci_art
 import time
 
-line_spacing = "====================="
-
 class Character: 
     def __init__(self, name, health, power, coins):
         self.name = name
