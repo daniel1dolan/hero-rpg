@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 import random
 
+line_spacing = "====================="
+
 class Character: 
     def __init__(self, name, health, power, coins):
         self.name = name
@@ -33,6 +35,7 @@ class Character:
         print(f"{self.name} has {self.health} health and {self.power} power.")
 
 class Hero(Character):
+    inventory = []
     def attack(self, enemy):
         #Crit value is a multiplier of power and doubles 20% of the time
         self.damage = (self.power * self.crit_multiplier()) - enemy.armor
@@ -51,7 +54,27 @@ class Hero(Character):
         return self.crit_mult
     def buy(self, item):
         self.coins -= item.cost
-        item.apply(self)
+        self.inventory.append(item)
+        item.count += 1
+    def use_item(self):
+        if len(self.inventory) > 0:
+            print(line_spacing)
+            print("Which item do you wish to use?")
+            for i in range(len(self.inventory)):
+                item = self.inventory[i]
+                print("{}. use {} ({})".format(i + 1, item.name, item.count))
+            print("10. Leave.")
+            raw_imp = int(input("> "))
+            if raw_imp == 10:
+                print(line_spacing)
+            else:
+                ItemToUse = self.inventory[raw_imp - 1]
+                item = ItemToUse
+                item.apply(self)
+                self.inventory.remove(item)
+        else: 
+            print(f"{self.name} has no items.")
+
 
 class Goblin(Character):
     pass
@@ -84,6 +107,7 @@ class SuperTonic:
     def __init__(self):
         self.cost = 5
         self.name = "tonic"
+        self.count = 0
     def apply(self, character):
         character.health += 10
         print(f"{character.name}\'s health increased to {character.health}.")
@@ -92,6 +116,7 @@ class Armor:
     def __init__(self):
         self.cost = 10
         self.name = "armor"
+        self.count = 0
     def apply(self, character):
         character.armor += 2
         print(f"{character.name}\'s armor has been increased to {character.armor}.")
@@ -101,6 +126,7 @@ class Evade:
         self.cost = 10
         self.name = "evade"
         self.use_count = 0
+        self.count = 0
     def apply(self, character):
         self.use_count += 1
         if self.use_count <= 2:
@@ -118,7 +144,6 @@ class Sword:
         character.power += 5
         print(f"{character.name}\'s power has been increased to {character.power}.")
 
-line_spacing = "====================="
 
 class Store:
     tonic = SuperTonic()
@@ -175,6 +200,7 @@ def main():
         print(f"1. fight {goblin.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -187,6 +213,8 @@ def main():
         elif raw_input == "3":
             print(f"{goblin.name} laughs.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
@@ -207,6 +235,7 @@ def main():
         print(f"1. fight {zombie.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -218,6 +247,8 @@ def main():
         elif raw_input == "3":
             print(f"{zombie.name} laughs.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
@@ -238,6 +269,7 @@ def main():
         print(f"1. fight {medic.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -250,6 +282,8 @@ def main():
         elif raw_input == "3":
             print(f"{medic.name} laughs.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
@@ -270,6 +304,7 @@ def main():
         print(f"1. fight {ghost.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -285,6 +320,8 @@ def main():
         elif raw_input == "3":
             print(f"{ghost.name} laughs.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
@@ -305,6 +342,7 @@ def main():
         print(f"1. fight {knight.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -317,6 +355,8 @@ def main():
         elif raw_input == "3":
             print(f"{knight.name} laughs.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
@@ -340,6 +380,7 @@ def main():
         print(f"1. fight {yogi.name}")
         print("2. do nothing")
         print("3. flee")
+        print("4. access inventory")
         print("> ", end=' ')
         raw_input = input()
         print(line_spacing)
@@ -358,6 +399,8 @@ def main():
         elif raw_input == "3":
             print(f"{yogi.name} waves goodbye in a Downward Dog.")
             break
+        elif raw_input == "4":
+            hero.use_item()
         else:
             print("Invalid input {}".format(raw_input))
 
