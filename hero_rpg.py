@@ -53,9 +53,13 @@ class Hero(Character):
             print(f"{self.name} has dealt a critical strike!")
         return self.crit_mult
     def buy(self, item):
-        self.coins -= item.cost
-        self.inventory.append(item)
-        item.count += 1
+        if self.coins >= item.cost:
+            self.coins -= item.cost
+            self.inventory.append(item)
+            item.count += 1
+            print(f"{item.name} added to {self.name}\'s inventory.")
+        else: 
+            print("You do not have enough coins to purchase this item.")
     def use_item(self):
         if len(self.inventory) > 0:
             print(line_spacing)
@@ -63,10 +67,12 @@ class Hero(Character):
             for i in range(len(self.inventory)):
                 item = self.inventory[i]
                 print("{}. use {} ({})".format(i + 1, item.name, item.count))
-            print("10. Leave.")
+            print(len(self.inventory), " leave.")
             raw_imp = int(input("> "))
             if raw_imp == 10:
                 print(line_spacing)
+            elif raw_imp > len(self.inventory):
+                print("Invalid input.")
             else:
                 ItemToUse = self.inventory[raw_imp - 1]
                 item = ItemToUse
@@ -161,11 +167,13 @@ class Store:
             for i in range(len(self.items)):
                 item = self.items[i]
                 print("{}. buy {} ({})".format(i + 1, item.name, item.cost))
-            print("10. leave")
+            print("5. leave")
             raw_imp = int(input("> "))
-            if raw_imp == 10:
+            if raw_imp == 5:
                 print(line_spacing)
                 break
+            elif raw_imp > 5:
+                print("Invalid input.")
             else:
                 ItemToBuy = Store.items[raw_imp - 1]
                 item = ItemToBuy
