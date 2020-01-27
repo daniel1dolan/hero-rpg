@@ -67,11 +67,11 @@ class Hero(Character):
             for i in range(len(self.inventory)):
                 item = self.inventory[i]
                 print("{}. use {} ({})".format(i + 1, item.name, item.count))
-            print(len(self.inventory), " leave.")
+            print(str((len(self.inventory) + 1)) + ". leave")
             raw_imp = int(input("> "))
-            if raw_imp == 10:
+            if raw_imp == len(self.inventory) + 1:
                 print(line_spacing)
-            elif raw_imp > len(self.inventory):
+            elif raw_imp > len(self.inventory) + 1:
                 print("Invalid input.")
             else:
                 ItemToUse = self.inventory[raw_imp - 1]
