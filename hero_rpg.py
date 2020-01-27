@@ -42,6 +42,7 @@ class Hero(Character):
             print(f"{enemy.name} is dead!")
             self.coins += enemy.coins
             print(f"{self.name} has received the bounty for {enemy.name} of {enemy.coins}.")
+            print(line_spacing)
     def crit_multiplier(self):
         self.crit_mult = 1
         if random.randint(1, 6) == 3:
@@ -74,7 +75,7 @@ class Knight(Hero):
         self.knightly_quotes = ["Tis' just a fleshwound.", f"My task is set, {hero.name} you will be defeated!", "You are a fool for challenging me.", "Knighthood lies above eternity; it doesn't live off fame, but rather deeds.", "Did somebody lose thier sweet roll?", "Time to cleanse the empire of its filth."]
         self.rand_index = 0
         self.rand_index = random.randint(0, (len(self.knightly_quotes)-1))
-        print(self.knightly_quotes[self.rand_index])
+        print(f"{self.name}: ", self.knightly_quotes[self.rand_index])
 
 class Yogi(Character):
     pass
@@ -138,6 +139,7 @@ class Store:
             print("10. leave")
             raw_imp = int(input("> "))
             if raw_imp == 10:
+                print(line_spacing)
                 break
             else:
                 ItemToBuy = Store.items[raw_imp - 1]
@@ -149,6 +151,8 @@ class Store:
         store_status = int(input("> "))
         if store_status == 1:
             self.do_shopping(character)
+        else: 
+            print(line_spacing)
 
 
 def main():
